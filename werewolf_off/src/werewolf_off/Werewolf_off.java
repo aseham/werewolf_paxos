@@ -78,10 +78,10 @@ public class Werewolf_off {
     if (player[0].getRolePlayer()) {
       System.out.print("The werewolves are: Player #0");  // pemain dianggap player #0
       for (int i=1;i<nPlayer;i++)
-        if (player[i].getRolePlayer()) System.out.println(", Player #"+(i));
+        if (player[i].getRolePlayer()) System.out.print(", Player #"+(i));
     }
     
-    System.out.println("\n--- Day 2. All villagers awake. There are "+nWerewolf+" werewolves in the game.");
+    System.out.println("\n\n--- Day 2. All villagers awake. There are "+nWerewolf+" werewolves in the game.");
     int days = 2;
     
     do {
@@ -94,6 +94,10 @@ public class Werewolf_off {
             System.out.print("Player #"+i);
           else
             System.out.print(", Player #"+i);
+          if (player[i].getRolePlayer()) 
+            System.out.print(" (werewolf)");
+          else
+            System.out.print(" (villager)");
           count++;
         }
       }
@@ -104,15 +108,25 @@ public class Werewolf_off {
       
       int target;
       if (player[0].getRolePlayer()) {
-        System.out.println("\nVote a villager to be killed (type the player number): ");
+          
+        // ----- repeat from here
+        // harusnya cuman bisa ngevote pas player masih hidup
+        System.out.print("\nVote a villager to be killed (type the player number): ");
         Scanner in2 = new Scanner(System.in);
         do {
           target = in2.nextInt();
         } while (player[target].getRolePlayer() || !player[target].getStatusPlayer());
+        
+        // define vote leader
+        
         System.out.println("Waiting for agreement among the werewolves...");
         
-        // define some paxos here
+        // define agreement system
+        // agreement tercapai klo ada yg lbih dari/sama dengan 1/2 n+1
         
+        // ----- to here
+        
+        System.out.println("Agreement reached. Player #"+target+" will be killed.");
       } else {
         System.out.println("\nThe villager sleeps.");
         do {
@@ -131,6 +145,10 @@ public class Werewolf_off {
             System.out.print("Player #"+i);
           else
             System.out.print(", Player #"+i);
+          if (player[i].getRolePlayer()) 
+            System.out.print(" (werewolf)");
+          else
+            System.out.print(" (villager)");
           count++;
         }
       }
@@ -139,19 +157,25 @@ public class Werewolf_off {
       if (endCondition())
         break;
       
-      System.out.println("\nVote a player to be killed (type the player number): ");
+      // ----- repeat from here
+      // harusnya cuman bisa ngevote pas player masih hidup
+      System.out.print("\nVote a player to be killed (type the player number): ");
       Scanner in2 = new Scanner(System.in);
       do {
         target = in2.nextInt();
       } while (!player[target].getStatusPlayer());
         
-      // define paxos again here
+      // define vote leader
       
-      // villager's vote blum diimplementasiin,
       // harusnya sama kea werewolf's vote, tapi cuman 2x tie condition
       
       System.out.println("Player #"+target+" is voted to be killed.");
       System.out.println("Waiting for agreement among the players...");
+      
+      // agreement tercapai klo ada yg lbih dari/sama dengan 1/2 n+1
+      
+      // ----- to here
+      
       System.out.println("Agreement reached. Player #"+target+" is killed.");
       player[target].killPlayer();
       if (player[target].getRolePlayer()) {
@@ -172,6 +196,15 @@ public class Werewolf_off {
         break;
       default: System.out.println("Error found.");
     }
+    System.out.println("Players and their role: ");
+    int count=0;
+    for (int i=0;i<nPlayer;i++) {
+      System.out.print("Player #"+i);
+      if (player[i].getRolePlayer()) 
+        System.out.println(": werewolf");
+      else
+        System.out.println(": villager");
+      count++;
+    }
   }
-    
 }
