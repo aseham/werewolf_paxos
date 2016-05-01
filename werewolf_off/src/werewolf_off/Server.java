@@ -7,6 +7,7 @@ package werewolf_off;
 
 
 import java.awt.print.Paper;
+import java.io.BufferedReader;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.ServerSocket;
@@ -17,13 +18,14 @@ import java.net.UnknownHostException;
 import java.io.PrintStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.parser.JSONParser;
+//import org.json.parser.JSONParser;
 
 /**
  *
@@ -78,7 +80,7 @@ public class Server implements Runnable{
     public void sendJSON(JSONObject jobject) throws IOException{
         
         JSONObject jobject2 = new JSONObject();
-        jobject2.put("key", new Paper(250, 333));
+        jobject2.put("key", new Paper());
         
         OutputStream out = socket.getOutputStream();
         ObjectOutputStream o_out = new ObjectOutputStream(out);
@@ -86,5 +88,26 @@ public class Server implements Runnable{
         out.flush();
     }
     
-    pub
+    public void run(){
+        try{
+            while(true){
+                fromClient = serverSocket.accept();
+                counter++;
+                streamFromClient = new BufferedReader(new InputStreamReader(fromClient.getInputStream()));
+                
+                //InputStreamReader = new InputStreamReader(fromClient.getInputStream());
+                String s = streamFromClient.readLine();
+                System.out.println(s);
+                streamToClient.println("Welcom "+s);
+            }
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        
+        try{
+            fromClient.close();
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+    }
 }
