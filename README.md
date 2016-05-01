@@ -35,3 +35,4 @@ misc:
 - yg mati cuman bisa liat status game (= spectator)
 - semua yg mati ditampilin pada semua client, beserta rolenya
 - klo ada yg kurang tambahin aja
+- klo ada yg salah benerin aja
