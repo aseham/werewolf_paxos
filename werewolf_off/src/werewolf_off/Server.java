@@ -98,7 +98,7 @@ public class Server implements Runnable{
                 //InputStreamReader = new InputStreamReader(fromClient.getInputStream());
                 String s = streamFromClient.readLine();
                 System.out.println(s);
-                streamToClient.println("Welcom "+s);
+                streamToClient.println("Welcome "+s);
             }
         } catch(Exception e){
             e.printStackTrace();

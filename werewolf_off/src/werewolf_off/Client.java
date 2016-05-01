@@ -19,6 +19,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
+import java.util.Random;
 import org.json.JSONObject;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +38,7 @@ public class Client {
     private boolean isProposer;
     private int n_proposal;
     private int former_kpu;
+    private Random random;
     
     private Socket clientSocket;
     
@@ -44,7 +46,7 @@ public class Client {
         player_id = id;
         port = p;
         n_proposal = 0;
-        
+        random = new Random(); // from unreliable sender
         former_kpu = -99; // initialize
         isProposer = false;
     }
@@ -99,7 +101,7 @@ public class Client {
         return clientSocket;
     }
 
-/* contoh yang UDP    
+    //Unreliable sender
     public void sentToClient(String adr, int p, String message)throws SocketException, UnknownHostException, IOException{
         DatagramSocket sender = new DatagramSocket();
         InetAddress ip = InetAddress.getByName(adr);
@@ -107,10 +109,27 @@ public class Client {
         sendData = message.getBytes();
         
         DatagramPacket sendPacket = new DatagramPacket(sendData,sendData.length, ip, p);
-        sender.send(sendPacket);
+        double rand = random.nextDouble();
+        if(rand < 0.85){
+            sender.send(sendPacket);
+        }
         sender.close();      
     }
-*/
+    
+    //Unreliable receiver
+    public void recvFromClient(String adr, int p) throws SocketException, IOException{
+        DatagramSocket recv = new DatagramSocket(p);
+        byte[] recvData = new byte[1024];
+        
+        while(true){
+            DatagramPacket recvPacket =new DatagramPacket(recvData, recvData.length);
+            recv.receive(recvPacket);
+            
+            String s = new String(recvPacket.getData(), 0, recvPacket.getLength());
+            System.out.println("ReceivedD\n" +s);
+        }
+    }
+    
     // Connect to server
     public void connect(String ip, int p)throws IOException{
         clientSocket = new Socket(ip,p);
@@ -131,7 +150,7 @@ public class Client {
         temp = (Object) o_in.readObject();
         
         if(temp instanceof JSONObject){
-            System.out.println((JSONObject)temp.toString());
+            System.out.println(temp.toString());
         } else System.out.println("Error");
     }
     
