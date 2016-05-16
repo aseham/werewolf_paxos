@@ -21,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.util.Random;
 import org.json.JSONObject;
 
 /**
@@ -41,7 +42,8 @@ public class Werewolf_Server {
     Thread thread;
     
     static int counter = 0;
-    
+    static int n_player;
+            
     public Werewolf_Server(){
         this.host = host;
         this.port = port;
@@ -115,21 +117,44 @@ public class Werewolf_Server {
         try{
             host = args[0];
             port = Integer.parseInt(args[1]);
-            int n_player = Integer.parseInt(args[2]);
+            n_player = Integer.parseInt(args[2]);
+            int n_werewolf=0;
             ServerSocket listener = new ServerSocket(port);
             Socket server;
             int i = 0;
             System.out.println("Server has been set up");
-            //Maksimun 20 player
-            while(i<20){    
+            ConnectionHandler[] connection = new ConnectionHandler[n_player];
+            //waiting n_player
+            while(i<n_player){    
                 server = listener.accept();
-                ConnectionHandler connection= new ConnectionHandler(i,server);
-                Thread t = new Thread(connection);
+                
+                //random role
+                Random r = new Random();
+
+                int role = r.nextInt(2) + 1;
+                if (role == 1 && n_werewolf<=n_player/3 ){
+                    n_werewolf++;
+                } else {
+                    role=0;
+                }
+                connection[i]= new ConnectionHandler(i,role,server);
+                Thread t = new Thread(connection[i]);
                 t.start();
                 i++;
             }
-            while(true){
-                //do nothing
+            
+            System.out.println("Game Start");
+            System.out.println(n_werewolf);
+            System.out.println("Day #1");
+            i=0;
+            while(i<n_player){
+                System.out.println("Player id:" + connection[i].player.getID());
+                if(connection[i].player.getRole() == 0){
+                    System.out.println("Player role: Villager");
+                } else System.out.println("Player role: Werewolf");
+                System.out.println("Player role:" + connection[i].player.getStatus());
+                System.out.println("------------------------------------");
+                i++;
             } 
         } catch (IOException ioe) {
           System.out.println("IOException on socket listen: " + ioe);

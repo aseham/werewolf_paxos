@@ -112,6 +112,7 @@ public class Werewolf_Client {
     
     /**
      * @param args the command line arguments
+     * @throws java.io.IOException
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
@@ -123,11 +124,13 @@ public class Werewolf_Client {
         OutputStream outToServer = client.getOutputStream();  
         Din = new DataInputStream(inFromServer);
         Dout = new DataOutputStream(outToServer);
-
+        message = "INIT";
+        //System.out.println("Masuk");
         while(!message.equals("END")){
+            System.out.println("Masuk");
             message = Din.readUTF();
             React();
-        }
+        }//*/
     }
     
 }

@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 public class ConnectionHandler implements Runnable {
     private Socket server;
     private String line,input;
-    private Player player;
+    public Player player;
     private String state;
     
     int nWerewolf = 0;
@@ -33,11 +33,12 @@ public class ConnectionHandler implements Runnable {
     private final String malam = "MALAM";
     private final String end = "END";
     
-    public ConnectionHandler(int _id,Socket _server){
+    public ConnectionHandler(int _id,int _role,Socket _server){
         this.server = _server;
         this.player = new Player();
         player.setID(_id);
-        
+        player.setRole(_role);
+        System.out.println("Player #"+ _id + "has join\n");
     }
     
     

@@ -13,12 +13,12 @@ import java.util.Random;
  */
 public class Player {
     private int id;
-    private boolean isWerewolf;
+    private int role; // 1 is werewolf, 0 is vilagers
     private String status;
     
     public Player(){
         id = 0;
-        isWerewolf = false;
+        role = 0;
         status = "ALIVE";
     }
     
@@ -34,6 +34,20 @@ public class Player {
         this.id = id;
     };
     
+    public int getRole(){
+        return role;
+    };
     
+    public void setRole(int role){
+        this.role = role;
+    };
+    
+    public String getStatus(){
+        return status;
+    };
+    
+    public void setStatus(String _stat){
+        this.status = _stat;
+    };
     
 }
