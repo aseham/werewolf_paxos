@@ -36,3 +36,9 @@ misc:
 - semua yg mati ditampilin pada semua client, beserta rolenya
 - klo ada yg kurang tambahin aja
 - klo ada yg salah benerin aja
+
+How to run:
+Server
+java -jar Werewolf_Server.jar [ip_adress_server] [Port] [Num_Player]
+Client
+java -jar Werewolf_Client.jar [ip_adress_server] [Port]
